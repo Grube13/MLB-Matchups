@@ -2,7 +2,7 @@ name: Update Matchups Daily
 
 on:
   schedule:
-    - cron: '0 10 * * *'  # Runs every day at 10:00 UTC
+    - cron: '0 14 * * *'  # Every day at 2:00 PM UTC
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -21,15 +21,15 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-    - name: Generate matchup data
-      run: python scripts/generate_matchups.py
+      - name: Generate matchup data
+        run: python scripts/generate_matchups.py
 
-    - name: Commit and push JSON data
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git add matchup_results.json
-        git commit -m "Update matchup data" || echo "No changes to commit"
-        git push
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push JSON data
+        run: |
+          git config --global user.name "Grube13"
+          git config --global user.email "grubebrandon@yahoo.com"
+          git add matchup_results.json
+          git commit -m "Update matchup data" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
