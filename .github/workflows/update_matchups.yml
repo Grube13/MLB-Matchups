@@ -22,7 +22,7 @@ jobs:
         run: pip install requests
 
       - name: Generate matchup data
-        run: python scripts/generate_matchups.py
+        run: python generate_matchups.py
 
       - name: Configure Git
         run: |
