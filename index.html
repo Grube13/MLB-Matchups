@@ -1,47 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>MLB Matchup Predictions</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MLB Matchups</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 30px;
-      background: #f7f7f7;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
     }
     h1 {
-      color: #003366;
+      text-align: center;
     }
     .matchup {
       background: white;
-      padding: 20px;
-      margin: 10px 0;
-      border-left: 5px solid #003366;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px auto;
+      max-width: 600px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .matchup h3 {
+      margin: 0 0 10px;
     }
   </style>
 </head>
 <body>
-  <h1>MLB Matchup Predictions</h1>
-  <div id="matchups">Loading...</div>
+  <h1>Today's MLB Matchups</h1>
+  <div id="matchups"></div>
 
-  script>
-    fetch('matchup_results.json')
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById('matchups');
-        container.innerHTML = '';
+  <script>
+    async function loadMatchups() {
+      const container = document.getElementById('matchups');
+      try {
+        const res = await fetch('matchup_results.json');
+        if (!res.ok) throw new Error('JSON not found');
+        const data = await res.json();
+
+        if (!data.length) {
+          container.innerHTML = '<p>No matchups found for today.</p>';
+          return;
+        }
+
         data.forEach(game => {
           const div = document.createElement('div');
           div.className = 'matchup';
           div.innerHTML = `
-            <strong>${game.away}</strong> @ <strong>${game.home}</strong><br>
-            <b>${game.favored}</b> is favored<br>
-            Scores - ${game.away}: ${game.away_score} | ${game.home}: ${game.home_score}
+            <h3>${game.away_team} @ ${game.home_team}</h3>
+            <p><strong>Pitchers:</strong> ${game.away_pitcher} vs ${game.home_pitcher}</p>
+            <p><strong>Venue:</strong> ${game.venue}</p>
           `;
           container.appendChild(div);
         });
-      })
-      .catch(err => {
-        document.getElementById('matchups').innerText = 'Failed to load matchups.';
+      } catch (err) {
+        container.innerHTML = '<p>Failed to load live matchups.</p>';
         console.error(err);
-      });
+      }
+    }
+
+    loadMatchups();
   </script>
+</body>
+</html>
