@@ -1,20 +1,7 @@
 name: Update MLB Matchups Daily
 
 on:
-  schedule:
-    - cron: '0 12 * * *'  # Runs daily at 12:00 UTC (7am ET)
-  workflow_dispatch:       # Also allows manual runs
-
-jobs:
-  run-script:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+  
         with:
           python-version: '3.10'
 
