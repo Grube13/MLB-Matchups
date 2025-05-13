@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MLB Matchup Predictions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f7f7f7;
+    }
+    h1 {
+      color: #003366;
+    }
+    .matchup {
+      background: white;
+      padding: 20px;
+      margin: 10px 0;
+      border-left: 5px solid #003366;
+    }
+  </style>
+</head>
+<body>
+  <h1>MLB Matchup Predictions</h1>
+  <div id="matchups">Loading...</div>
+
+  <script>
+    fetch('matchup_results.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('matchups');
+        container.innerHTML = '';
+        data.forEach(game => {
+          const div = document.createElement('div');
+          div.className = 'matchup';
+          div.innerHTML = `
+            <strong>${game.away}</strong> @ <strong>${game.home}</strong><br>
+            <b>${game.favored}</b> is favored<br>
+            Scores - ${game.away}: ${game.away_score} | ${game.home}: ${game.home_score}
+          `;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        document.getElementById('matchups').innerText = 'Failed to load matchups.';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
