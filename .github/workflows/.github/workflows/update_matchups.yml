@@ -1,0 +1,32 @@
+name: Update Matchups Daily
+
+on:
+  schedule:
+    - cron: "0 10 * * *"  # Runs every day at 10 AM UTC
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install mlb-statsapi
+
+      - name: Run script
+        run: python generate_matchups.py
+
+      - name: Commit updated JSON
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add matchup_results.json || echo "No changes to commit"
+          git commit -m "Update matchups" || echo "Nothing to commit"
+          git push
